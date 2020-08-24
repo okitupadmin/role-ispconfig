@@ -7,7 +7,6 @@
 [Title Config Role Variables]: #variables
 [Title Tags]: #tags
 [Title Sources]: #sources
-[Title Credits]: #credits
 [Title License]: #license
 
 ## Summary
@@ -18,7 +17,6 @@
 - [Configuring the role][Title Configuring the role]
 - [Tags][Title Tags]
 - [Sources][Title Sources]
-- [Credits][Title Credits]
 - [License][Title License]
 
 ## Overview
@@ -164,23 +162,5 @@ ispconfig_finalize
 - https://www.digitalocean.com/community/tutorials/how-to-protect-an-apache-server-with-fail2ban-on-ubuntu-14-04
 - https://www.muehlencord.de/wordpress/2015/07/28/protecting-servers-with-fail2ban-apache-httpd-webserver/
 
-## Credits
-
-Author : Alban E.G.
-
 ## License
-
-This file is part of the ISPConfig ansible role.
-
-The ISPConfig ansible role is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-The ISPConfig ansible role is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with the ISPConfig ansible roles.  If not, see <https://www.gnu.org/licenses/>.
+MIT
