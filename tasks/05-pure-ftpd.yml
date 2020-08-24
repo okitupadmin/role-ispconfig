@@ -31,8 +31,7 @@
   file:
     path: /etc/ssl/private
     state: directory
-  when:
-    - install_pureftpd_ssl
+  when: install_pureftpd_ssl
 
 ## This is tricky
 ## https://www.shellhacks.com/create-csr-openssl-without-prompt-non-interactive/

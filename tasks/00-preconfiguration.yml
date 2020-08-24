@@ -31,9 +31,11 @@
 ################
 ## Facts.conf ##
 ################
-## Make sure /etc/facts.conf exist (used for some tasks,ensuring theses does not start twice)
+## Make sure /etc/facts.conf exist (used for some tasks, ensuring theses does not start twice)
 - name: "Pre-configuration | Check if /etc/facts.conf exists"
-  stat: path=/etc/facts.conf
+  stat:
+    path: /etc/facts.conf
+    get_checksum: no
   register: facts_conf_file
 
 - name: "Pre-configuration | Ensure /etc/facts.conf exist"
@@ -85,9 +87,7 @@
   template:
     src: 00-f2b.jail.local.j2
     dest: /etc/fail2ban/jail.local
-  when:
-    - not ansible_check_mode
-    - install_security_packages
+  when: install_security_packages
 
 - name: "Pre-configuration | Configure fail2ban filters"
   template:
@@ -97,9 +97,7 @@
     - apache-dos
     - apache-w00tw00t
     - apache-phpmyadmin
-  when:
-    - not ansible_check_mode
-    - install_security_packages
+  when: install_security_packages
   notify: restart fail2ban
 
 - name: "Pre-configuration | Configure /etc/default/rkhunter"

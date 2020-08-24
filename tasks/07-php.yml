@@ -1,20 +1,16 @@
 ---
 ########################
-## PHP 7.2 Repository ## https://ayesh.me/Ubuntu-PHP-7.2
+## PHP 7 Repository ## https://ayesh.me/Ubuntu-PHP-7.2
 ########################
 
-- name: "PHP 7.2 | Download repository key"
+- name: "PHP | Download Sury repository key"
   get_url:
     url: https://packages.sury.org/php/apt.gpg
     dest: /etc/apt/trusted.gpg.d/php.gpg
-  when: install_php7_2
 
-- name: "PHP 7.2 | Add repository"
+- name: "PHP | Add Sury repository"
   apt_repository:
-    repo: "{{ item }}"
-  with_items:
-    - deb https://packages.sury.org/php/ stretch main
-  when: install_php7_2
+    repo: "deb https://packages.sury.org/php/ stretch main"
 
 ###########################
 ## Packages installation ##
@@ -35,17 +31,21 @@
     name: "{{ item }}"
   with_items:
     - "{{ php7_1_packages }}"
-  when:
-    - install_php7_1
+  when: install_php7_1
 
 - name: "PHP 7.2 | Install packages"
   apt:
     name: "{{ item }}"
   with_items:
     - "{{ php7_2_packages }}"
-  when:
-    - install_php7_2
-    - not ansible_check_mode
+  when: install_php7_2
+
+- name: "PHP 7.3 | Install packages"
+  apt:
+    name: "{{ item }}"
+  with_items:
+    - "{{ php7_3_packages }}"
+  when: install_php7_3
 
 - name: "PHP | Install other packages"
   apt:
@@ -53,35 +53,42 @@
   with_items:
     - "{{ php_other_packages }}"
 
+#################
+## PHP mycrypt ## https://gist.github.com/arzzen/1209aa4a430bd95db3090a3399e6c35f
+#################
+
+- name: "PHP | Install & configure mcrypt"
+  pear:
+    name: pecl/mcrypt-1.0.2
+  when: install_php7_2 or install_php7_3
+
 #####################
-## PHP 7.2 mycrypt ## https://gist.github.com/arzzen/1209aa4a430bd95db3090a3399e6c35f
+## PHP 7.2 mycrypt ##
 #####################
 
-- name: "PHP 7.2 | Ensure /etc/php/7.2/apache2/conf.d exist"
+- name: "PHP 7.2 | Ensure /etc/php/{{ item }}/conf.d exist"
   file:
-    path: /etc/php/7.2/apache2/conf.d
+    path: /etc/php/7.2/{{ item }}/conf.d
     state: directory
     owner: root
     group: root
   when: install_php7_2
+  with_items:
+    - fpm
+    - cli
+    - apache2
+    - cgi
 
-- name: "PHP (extra) | Install & configure php7.2-mcrypt"
-  pear:
-    name: pecl/mcrypt-1.0.1
-    state: present
-  when: install_php7_2
-  
 - block:
     - file:
         path: /etc/php/7.2/mods-available/mcrypt.ini
         state: touch
     - lineinfile:
-        line: "extension=/usr/lib/php/20170718/mcrypt.so"
+        line: "extension=/usr/lib/php/20180731/mcrypt.so"
         path: /etc/php/7.2/mods-available/mcrypt.ini
-        state: present
   when: install_php7_2
-  
-- name: enable php7.2-mcrypt
+
+- name: "PHP 7.2 | Enable mcrypt"
   file:
     src: /etc/php/7.2/mods-available/mcrypt.ini
     dest: /etc/php/7.2/{{ item }}/conf.d/20-mcrypt.ini
@@ -93,3 +100,44 @@
     - fpm
     - cli
     - apache2
+    - cgi
+
+#####################
+## PHP 7.3 mycrypt ##
+#####################
+
+- name: "PHP 7.3 | Ensure /etc/php/{{ item }}/conf.d exist"
+  file:
+    path: /etc/php/7.3/{{ item }}/conf.d
+    state: directory
+    owner: root
+    group: root
+  when: install_php7_3
+  with_items:
+    - fpm
+    - cli
+    - apache2
+    - cgi
+  
+- block:
+    - file:
+        path: /etc/php/7.3/mods-available/mcrypt.ini
+        state: touch
+    - lineinfile:
+        line: "extension=/usr/lib/php/20180731/mcrypt.so"
+        path: /etc/php/7.3/mods-available/mcrypt.ini
+  when: install_php7_3
+
+- name: "PHP 7.3 | Enable mcrypt"
+  file:
+    src: /etc/php/7.3/mods-available/mcrypt.ini
+    dest: /etc/php/7.3/{{ item }}/conf.d/20-mcrypt.ini
+    owner: root
+    group: root
+    state: link
+  when: install_php7_3
+  with_items:
+    - fpm
+    - cli
+    - apache2
+    - cgi

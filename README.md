@@ -105,7 +105,8 @@ For a full installation, you will want to set every `install_xxx` variables to t
 | install_apache2          | BOOL   | no       | false   | Install & configure apache2 |
 | install_php              | BOOL   | no       | false   | Install php7.0 |
 | install_php7_1           | BOOL   | no       | false   | Install php7.1 (will have php7.0 + php7.1 as default version) |
-| install_php7_2           | BOOL   | no       | false   | Install php7.2 (will have php7.0 (+ php7.1 if enabled) + php7.2 as default version) |
+| install_php7_2           | BOOL   | no       | false   | Install php7.2 (will have php7.0 (+ php7.x if enabled) + php7.2 as default version) |
+| install_php7_3           | BOOL   | no       | false   | Install php7.3 (will have php7.0 (+ php7.x if enabled) + php7.3 as default version) |
 | install_mysql            | BOOL   | no       | false   | Install & configure mysql |
 | install_mysql_secure     | BOOL   | no       | false   | Deploy mysql_secure_installation tasks |
 | install_phpmyadmin       | BOOL   | no       | false   | Install phpmyadmin |

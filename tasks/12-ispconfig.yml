@@ -17,12 +17,10 @@
 
 - name: "ISPConfig-Installer | Get ispconfig_update.sh script in /usr/local/sbin"
   copy:
-    src: /tmp/ispconfig3_install/server/scripts/{{ item }}
-    dest: /usr/local/sbin/{{ item }}
+    src: /tmp/ispconfig3_install/server/scripts/ispconfig_update.sh
+    dest: /usr/local/sbin/ispconfig_update.sh
     remote_src: yes
     owner: root
     group: root
     mode: 0750
-  with_items:
-    - ispconfig_update.sh
   when: not ansible_check_mode
