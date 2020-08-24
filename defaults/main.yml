@@ -218,6 +218,7 @@ php_other_packages:
   - php-gettext
   - php-pear
   - php-apcu
+  - php-xml
 
 ####################
 ## MySQL packages ##
