@@ -57,10 +57,16 @@
 ## PHP mycrypt ## https://gist.github.com/arzzen/1209aa4a430bd95db3090a3399e6c35f
 #################
 
+  # Install through pear module was not working very well... Waiting for accept => "ibmcrypt prefix? [autodetect] :"
 - name: "PHP | Install & configure mcrypt"
-  pear:
-    name: pecl/mcrypt-1.0.2
-  when: install_php7_2 or install_php7_3
+  shell: "{{ item }}"
+  with_items:
+    - 'echo "" | pecl install mcrypt-1.0.4'
+  when: install_php7_2 or install_php7_3 or install_php7_4
+  register: result_pecl_mcrypt
+  failed_when:
+    - '"is already installed" not in result_pecl_mcrypt.stdout'
+    - result_pecl_mcrypt is failed
 
 #####################
 ## PHP 7.2 mycrypt ##
@@ -84,7 +90,7 @@
         path: /etc/php/7.2/mods-available/mcrypt.ini
         state: touch
     - lineinfile:
-        line: "extension=/usr/lib/php/20180731/mcrypt.so"
+        line: "extension=/usr/lib/php/20170718/mcrypt.so"
         path: /etc/php/7.2/mods-available/mcrypt.ini
   when: install_php7_2
 
@@ -124,7 +130,7 @@
         path: /etc/php/7.3/mods-available/mcrypt.ini
         state: touch
     - lineinfile:
-        line: "extension=/usr/lib/php/20180731/mcrypt.so"
+        line: "extension=/usr/lib/php/20170718/mcrypt.so"
         path: /etc/php/7.3/mods-available/mcrypt.ini
   when: install_php7_3
 
