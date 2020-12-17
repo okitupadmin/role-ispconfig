@@ -47,15 +47,13 @@
     state: present
   check_mode: yes
   register: facts_mailman
-  failed_when: (facts_mailman is changed) or (facts_mailman is failed)
-  ignore_errors: True
-  when: install_mailman
+  when: install_mailman|bool
   tags: ispconfig_mailman
 
 - name: Include mailman
   include: 04-mailman.yml
   when:
-    - facts_mailman is failed
+    - (facts_mailman is changed) or (facts_mailman is failed)
     - install_mailman
     - admin_email is defined
   tags: ispconfig_mailman
@@ -99,18 +97,16 @@
     state: present
   check_mode: yes
   register: facts_mysql_secure
-  failed_when: (facts_mysql_secure is changed) or (facts_mysql_secure is failed)
-  ignore_errors: True
   when:
-    - install_mysql
-    - install_mysql_secure
+    - install_mysql|bool
+    - install_mysql_secure|bool
   tags: ispconfig_mysql_secure
 
 - name: Include mysql-secure
   include: 09-mysql_secure_installation.yml
   when:
     - not ansible_check_mode
-    - facts_mysql_secure is failed
+    - (facts_mysql_secure is changed) or (facts_mysql_secure is failed)
     - install_mysql
     - install_mysql_secure
     - not mysql_already_installed
